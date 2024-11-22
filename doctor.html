@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Symptom Selector with Doctor Assignment</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f7fc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      p {
+        font-size: 1.1em;
+        color: #555;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .symptom-category {
+        margin-bottom: 20px;
+      }
+      .symptom-category h3 {
+        color: #333;
+        font-size: 1.2em;
+      }
+      .symptom-category label {
+        display: block;
+        font-size: 1em;
+        color: #333;
+        margin: 8px 0;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        background-color: #003366;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1em;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #005b99;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      #doctor-info {
+        margin-top: 30px;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        display: none;
+      }
+      #doctor-info h3 {
+        text-align: center;
+        color: #003366;
+      }
+      #doctor-info p {
+        font-size: 1.1em;
+        color: #555;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Select Your Symptoms</h1>
+      <p>Please select any symptoms you are currently experiencing. You can select more than one if needed.</p>
+
+      <form id="symptomForm">
+        <!-- Symptoms categories -->
+        <div class="symptom-category">
+          <h3>Common Symptoms</h3>
+          <label><input type="checkbox" name="common" value="Fever" /> Fever (high temperature)</label>
+          <label><input type="checkbox" name="common" value="Cough" /> Cough</label>
+          <label><input type="checkbox" name="common" value="Sore Throat" /> Sore Throat</label>
+          <label><input type="checkbox" name="common" value="Headache" /> Headache</label>
+        </div>
+
+        <div class="symptom-category">
+          <h3>Fatigue and Body Pain</h3>
+          <label><input type="checkbox" name="fatigue" value="Tiredness" /> Feeling tired or weak</label>
+          <label><input type="checkbox" name="fatigue" value="Body Aches" /> Body Aches or Pain</label>
+          <label><input type="checkbox" name="fatigue" value="Chills" /> Chills (feeling cold)</label>
+        </div>
+
+        <div class="symptom-category">
+          <h3>Breathing and Other Symptoms</h3>
+          <label><input type="checkbox" name="breathing" value="Shortness of Breath" /> Shortness of Breath (trouble breathing)</label>
+          <label><input type="checkbox" name="breathing" value="Loss of Smell" /> Loss of Smell or Taste</label>
+          <label><input type="checkbox" name="breathing" value="Nausea" /> Nausea or Upset Stomach</label>
+        </div>
+
+        <div class="symptom-category">
+          <h3>Additional Symptoms</h3>
+          <label><input type="checkbox" name="additional" value="Dizziness" /> Dizziness or Lightheadedness</label>
+          <label><input type="checkbox" name="additional" value="Rash" /> Skin Rash</label>
+          <label><input type="checkbox" name="additional" value="Vomiting" /> Vomiting (throwing up)</label>
+        </div>
+
+        <div class="form-group">
+          <button type="button" onclick="assignDoctor()">Assign Doctor</button>
+        </div>
+      </form>
+
+      <!-- Doctor Info Section -->
+      <div id="doctor-info">
+        <h3>Your Assigned Doctor</h3>
+        <p id="doctorName"></p>
+        <p id="doctorSpecialty"></p>
+        <p id="doctorContact"></p>
+      </div>
+    </div>
+
+    <script>
+      // Function to assign a doctor based on selected symptoms
+      function assignDoctor() {
+        const selectedSymptoms = [];
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+
+        checkboxes.forEach((checkbox) => {
+          selectedSymptoms.push(checkbox.value);
+        });
+
+        if (selectedSymptoms.length === 0) {
+          alert("Please select at least one symptom.");
+          return;
+        }
+
+        // Assign doctor based on symptoms
+        const assignedDoctor = getAssignedDoctor(selectedSymptoms);
+
+        // Display the doctor information
+        if (assignedDoctor) {
+          document.getElementById("doctorName").innerText = "Doctor: " + assignedDoctor.name;
+          document.getElementById("doctorSpecialty").innerText = "Specialty: " + assignedDoctor.specialty;
+          document.getElementById("doctorContact").innerText = assignedDoctor.contact;
+
+          // Show doctor information section
+          document.getElementById("doctor-info").style.display = "block";
+        } else {
+          alert("No doctor found for the selected symptoms.");
+        }
+      }
+
+      // Function to return doctor details based on symptoms
+      function getAssignedDoctor(symptoms) {
+        const doctorAssignments = {
+          "fever": {
+            name: "Dr. Jane Smith",
+            specialty: "General Physician",
+            contact: "Phone: 123-456-7890"
+          },
+          "cough": {
+            name: "Dr. John Doe",
+            specialty: "Pulmonologist",
+            contact: "Phone: 987-654-3210"
+          },
+          "headache": {
+            name: "Dr. Emily Johnson",
+            specialty: "Neurologist",
+            contact: "Phone: 456-789-1234"
+          },
+          "shortness of breath": {
+            name: "Dr. Sarah Lee",
+            specialty: "Pulmonologist",
+            contact: "Phone: 321-654-9870"
+          },
+          "nausea": {
+            name: "Dr. Michael Brown",
+            specialty: "Gastroenterologist",
+            contact: "Phone: 678-123-4567"
+          },
+          "dizziness": {
+            name: "Dr. Olivia White",
+            specialty: "Neurologist",
+            contact: "Phone: 111-222-3333"
+          }
+        };
+
+        let assignedDoctor = null;
+
+        symptoms.forEach(symptom => {
+          if (doctorAssignments[symptom.toLowerCase()]) {
+            assignedDoctor = doctorAssignments[symptom.toLowerCase()];
+          }
+        });
+
+        return assignedDoctor;
+      }
+    </script>
+  </body>
+</html>

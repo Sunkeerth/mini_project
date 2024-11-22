@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f7fc;
+      }
+      .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: auto;
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      .symptoms,
+      .doctors {
+        margin-top: 20px;
+      }
+      .doctor-card {
+        margin-top: 10px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .doctor-card h3 {
+        margin: 0;
+        color: #003366;
+      }
+      .doctor-card p {
+        margin: 5px 0;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Doctor Details</h1>
+      <div class="symptoms">
+        <h2>Your Symptoms</h2>
+        <ul id="symptomList"></ul>
+      </div>
+      <div class="doctors">
+        <h2>Recommended Doctors</h2>
+        <div id="doctorList"></div>
+      </div>
+    </div>
+
+    <script>
+      const symptoms = JSON.parse(sessionStorage.getItem("selectedSymptoms"));
+      const doctors = JSON.parse(sessionStorage.getItem("doctorList"));
+
+      const symptomList = document.getElementById("symptomList");
+      symptoms.forEach((symptom) => {
+        const li = document.createElement("li");
+        li.textContent = symptom;
+        symptomList.appendChild(li);
+      });
+
+      const doctorList = document.getElementById("doctorList");
+      doctors.forEach((doctor) => {
+        const card = document.createElement("div");
+        card.className = "doctor-card";
+        card.innerHTML = `
+          <h3>${doctor.name}</h3>
+          <p><strong>Specialty:</strong> ${doctor.specialty}</p>
+          <p><strong>Contact:</strong> ${doctor.contact}</p>
+          <p><strong>Email:</strong> ${doctor.email}</p>
+        `;
+        doctorList.appendChild(card);
+      });
+    </script>
+  </body>
+</html>
